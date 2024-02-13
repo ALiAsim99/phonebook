@@ -42,14 +42,15 @@ app.get("/api/persons",(req,res)=>{
     .then(persons=>res.json(persons))
 })
 app.get("/api/persons/:id",(req,res)=>{
-    const id=Number(req.params.id)
-    
-    const person=persons.find(p=>p.id==id)
-    if(person){
-    res.json(person)
-    }else{
-        res.status(404).end()
-    }
+    Person.findById(req.params.id)
+    .then(person=>{
+        if(person){
+            res.json(person)
+        }else{
+            res.status(404).end()
+        }
+    })
+   
 })
 const generateId=()=>{
     const maxid=persons.length>0?Math.max(...persons.map(p=>p.id)):0;
@@ -64,14 +65,15 @@ app.post("/api/persons",(req,res)=>{
     if(persons.find(p=>p.name==body.name)){
         return res.status(400).json({error:"user already entered"})
     }
-    const newPersons={
+    const person=new Person({
         name:body.name,
         number:body.number,
         id:generateId()
-    }
-    persons=persons.concat(newPersons)
-    console.log(persons)
-    res.json(newPersons)
+    })
+    person.save(p=>{
+        res.json(p)
+    })
+   
 })
 app.delete("/api/persons/:id",(req,res)=>{
     const id=Number(req.params.id)
