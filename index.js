@@ -67,11 +67,13 @@ app.post("/api/persons",(req,res)=>{
         nunber:body.number,
         id:generateId()
     }
+    
     res.json(persons.concat(newPersons))
 })
 app.delete("/api/persons/:id",(req,res)=>{
     const id=Number(req.params.id)
     persons=persons.filter(p=>p.id!=id)
+    console.log(persons)
     res.status(204).end()
 
 })
