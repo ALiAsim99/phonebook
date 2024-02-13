@@ -49,13 +49,12 @@ app.get("/api/persons/:id",(req,res)=>{
     }
 })
 const generateId=()=>{
-    const id=Math.max(...persons.map(p=>p.id))
-    return id+1;
+    const maxid=persons.length>0?Math.max(...persons.map(p=>p.id)):0;
+    return maxid +1;
 }
 app.post("/api/persons",(req,res)=>{
     const body=req.body;
-    console.log(body)
-    console.log('zzz')
+    
     if(!body.name || !body.number){
         return res.status(400).json({error:"missing content"})
     }
@@ -64,16 +63,18 @@ app.post("/api/persons",(req,res)=>{
     }
     const newPersons={
         name:body.name,
-        nunber:body.number,
+        number:body.number,
         id:generateId()
     }
-    
-    res.json(persons.concat(newPersons))
+    persons=persons.concat(newPersons)
+    console.log(persons)
+    res.json(newPersons)
 })
 app.delete("/api/persons/:id",(req,res)=>{
     const id=Number(req.params.id)
+    console.log(id)
     persons=persons.filter(p=>p.id!=id)
-    console.log(persons)
+
     res.status(204).end()
 
 })
