@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const express=require('express')
 const cors=require('cors')
 const app=express()
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
-
+const Person=require('./models/person')
 const morgan=require('morgan')
 app.use(morgan('tiny'))
 
@@ -36,7 +38,8 @@ app.get("/info",(req,res)=>{
     res.send(`<p>Phonebook has info for ${persons.length}</p>`)
 })
 app.get("/api/persons",(req,res)=>{
-    res.json(persons)
+    Person.find({})
+    .then(persons=>res.json(persons))
 })
 app.get("/api/persons/:id",(req,res)=>{
     const id=Number(req.params.id)
