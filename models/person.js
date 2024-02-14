@@ -27,4 +27,4 @@ mongoose.connect(url)
     }
  })
 
- module.exports=mongose.model('Person',personSchema)
+ module.exports=mongoose.model('Person',personSchema)
